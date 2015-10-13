@@ -13,10 +13,9 @@
 (defun member (obj l)
   "Returns True if OBJ is eql to a member of list L,
 nil otherwise."
-  (assert (listp l) (l)
-          "L must be a list, instead it is ~S." l)
+  (check-type l list)
   (cond ((null l) nil)
-        ((eql obj (first l)) t)
+        ((eql obj (first l)) l)
         (t (member obj (rest l)))))
 
 (defun number-listp (l)
