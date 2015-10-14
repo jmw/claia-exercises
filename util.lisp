@@ -1,5 +1,7 @@
 (defpackage :util
-  (:use :common-lisp))
+  (:use :common-lisp)
+  (:export :elementp))
+
 (in-package :util)
 
 (defun elementp (obj)
