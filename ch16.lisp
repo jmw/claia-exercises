@@ -106,6 +106,15 @@ NIL otherwise"
 ;; of l omitting the first n.  For example, (allbut 3 '(a b (c d) e f)) should
 ;; be (e f).  Common Lisp already has the function nthcdr which works just like
 ;; allbut.  Try nthcdr with several examples.
+(defun allbut (n l)
+  "Return the list l with the first n members removed"
+  (check-type n integer)
+  (check-type l list)
+  (cond
+    ((null l) nil)
+    ((> n (length l)) nil)
+    ((= (1- n) 0) (rest l))
+    (t (allbut (1- n) (rest l)))))
 
 
 ;; 16.14 Define the function (assoc e al) where e is an element and al is a
@@ -113,14 +122,26 @@ NIL otherwise"
 ;; element of al whose first member is eql to e.  For example:
 ;; (assoc 'Mary
 ;;     '((John black hair brown eyes)
-;;      '(Mary blond hair blue eyes)
-;;      '(Sue red hair hazel eyes)))
+;;       (Mary blond hair blue eyes)
+;;       (Sue red hair hazel eyes)))
+;; (assoc ’Mary
+;;        ’((John black hair brown eyes)
+;;          (Mary blond hair blue eyes)
+;;          (Sue red hair hazel eyes)))
+
 ;; should return (Mary blond hair blue eyes).  We are treating al as an
 ;; association list in that we can associate a list of properties with each
 ;; element that is the first member of a member list of al.  Common Lisp
 ;; already has lisp:assoc defined, so shadow it. Use the CL version in the future
 ;; whenever you need its functionality.
 
+(defun myassoc (e l)
+  (check-type e (satisfies util:elementp))
+  (check-type l list)
+  (cond
+    ((null l) nil)
+    ((eql e (first (first l))) (first l))
+     (t (myassoc e (rest l)))))
 
 ;; 16.15 In your match.lisp file, define the function (matchelt l1 l2) to be like
 ;; equal-lelt except to consider the symbol ? (recognized by dont-care)

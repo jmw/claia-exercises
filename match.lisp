@@ -100,6 +100,20 @@
   (cond ((zerop i) 1)
         (t (product n (power n (1- i))))))
 
+;; 16.15 In your match.lisp file, define the function (matchelt l1 l2) to be like
+;; equal-lelt except to consider the symbol ? (recognized by dont-care)
+;; to be eql anything.  For example,
+;; (matchlelt '(a ? c d e) '(a b c ? e)) should return t
+(defun match-lelt (l1 l2)
+  (check-type l1 list)
+  (check-type l2 list)
+  (cond ((and (null l1) (null l2)) t)
+        ((not (= (length l1) (length l2))) nil)
+        ((or (or (dont-care (first l1)) (dont-care (first l2)))
+             (eql (first l1) (first l2))) (match-lelt (rest l1) (rest l2)))
+        (t nil)))
+
+
 ;;; Shadow any symbols from automatically inherited
 ;;; packages that have the same names as symbols
 ;;; in this package
