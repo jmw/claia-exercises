@@ -6,3 +6,6 @@
 (defun combine-expr (operator operand expression)
   "Returns an expression with the operand applied by the operator to the first element of the expression"
   (cons (list operand operator (first expression)) (rest expression)))
+
+;(defun mydivcomp (x y)
+;  (or (> (/ x y) 100) nil))
