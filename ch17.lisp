@@ -81,3 +81,13 @@ namely symbols, characters, numbers, and packages."
   (cond ((null l) nil)
         ((= n 0) '())
         (t (cons (first l) (firstn (1- n) (rest l))))))
+
+(defun subst* (new old l)
+  "Returns a copy of the list L with the element NEW replacing the all top-level occurrences of the element OLD"
+  (check-type new element)
+  (check-type old element)
+  (check-type l list)
+  (cond ((null l) '())
+        ((eql (first l) old) (cons new (subst* new old (rest l))))
+        (t (cons (first l)
+                 (subst* new old (rest l))))))
