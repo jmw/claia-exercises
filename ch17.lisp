@@ -73,3 +73,11 @@ namely symbols, characters, numbers, and packages."
 (defun identity (object)
   "Returns its argument unmodified"
   object)
+
+(defun firstn (n l)
+  "Returns a list whose members are the first n members of l."
+  (check-type l list)
+  (check-type n number)
+  (cond ((null l) nil)
+        ((= n 0) '())
+        (t (cons (first l) (firstn (1- n) (rest l))))))
