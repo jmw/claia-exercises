@@ -63,3 +63,22 @@
 ;; Make these external symbols in the set package and shadow common-lisp:first and
 ;; common-lisp:rest.  Go through all the definitions in your set file; make sure to type
 ;; common-lisp:first and common-lisp:rest wherever necessary.
+(shadow 'common-lisp:first)
+(defun first (s)
+  "Return the first element in set S"
+  (check-type s set)
+  (car s))
+
+(shadow 'common-lisp:rest)
+(defun rest (s)
+  "Return the set S without the first element"
+  (check-type s set)
+  (cdr s))
+
+;; 17.21 Define (insert e s) to return a set just like s, but
+;; with e added as an additional element.  If e is already in s, s should
+;; be returned unchanged.  Make insert an external symbol in the set package.
+(defun insert (e s)
+  "Returns a set just like s, but with e added as an additional element. If e is already in s, s is returned unchanged."
+  (check-type s set)
+  (makeset (cons e s)))
