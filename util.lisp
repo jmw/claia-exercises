@@ -1,6 +1,6 @@
 (defpackage :util
   (:use :common-lisp)
-  (:export :elementp :element))
+  (:export :elementp :element :bag))
 
 (in-package :util)
 
@@ -12,3 +12,5 @@
 namely symbols, characters, numbers, and packages."
          '(satisfies util:elementp))
 
+(deftype bag () "A bag is a list, some of whose members may be eql"
+         '(satisfies listp))

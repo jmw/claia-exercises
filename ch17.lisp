@@ -69,7 +69,6 @@ namely symbols, characters, numbers, and packages."
          (makeset (rest b)))
         (t (cons (first b) (makeset (rest b))))))
 
-
 (defun identity (object)
   "Returns its argument unmodified"
   object)
