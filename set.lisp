@@ -1,6 +1,6 @@
 (defpackage :set 
   (:use :common-lisp :util)
-  (:export :setp :set :makeset))
+  (:export :setp :set :makeset :insert))
 
 (in-package :set)
 
@@ -80,5 +80,25 @@
 ;; be returned unchanged.  Make insert an external symbol in the set package.
 (defun insert (e s)
   "Returns a set just like s, but with e added as an additional element. If e is already in s, s is returned unchanged."
-  (check-type s set)
-  (makeset (cons e s)))
+  (check-type s set:set)
+  (cond ((member e s) s)
+        (t (cons e s))))
+
+;; 17.22 Define empty to be a function that returns true
+;; if its one argument is a set with no elements, and false otherwise.
+;; Make empty an external symbol in the set package
+(defun empty (l)
+  "Returns true if its one argument is a set with no elements, and false otherwise."
+  (cond ((and (setp l) (null l)) t)
+        (t nil)))
+
+;; 17.23 Redefine set:union to use the new representation of sets.
+;; Define the help function union-unlabelled-sets as an internal function.
+;; Again evaluate (union '(a b c d) '(b d e f)) while tracing setp.
+
+;; 17.24 The intersection of two sets s1 and s2 is the set consisting
+;; of those elements that are in s1 and also in s2.  Define intersection
+;; in your set file, with intersection an external symbol in the set package.
+;; Shadow lisp:intersection.
+
+;; 17.25 
