@@ -93,12 +93,17 @@
         (t nil)))
 
 ;; 17.23 Redefine set:union to use the new representation of sets.
-;; Define the help function union-unlabelled-sets as an internal function.
+;; Define the helper function union-unlabelled-sets as an internal function.
 ;; Again evaluate (union '(a b c d) '(b d e f)) while tracing setp.
+
 
 ;; 17.24 The intersection of two sets s1 and s2 is the set consisting
 ;; of those elements that are in s1 and also in s2.  Define intersection
 ;; in your set file, with intersection an external symbol in the set package.
 ;; Shadow lisp:intersection.
 
-;; 17.25 
+
+;; 17.25 The relative complement of two sets s1 and s2 is
+;; the set consisting of those elements of s1 that are not also in s2.
+;; Define complement in your set file, with complement an external symbol
+;; in the set package.
