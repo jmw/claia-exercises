@@ -1,6 +1,6 @@
 (defpackage :set 
   (:use :common-lisp :util)
-  (:export :setp :set :makeset :insert))
+  (:export :setp :set :makeset :insert :empty :intersection :complement :subsetp))
 
 (in-package :set)
 
@@ -19,7 +19,7 @@
 
 (defun makeset (b)
   "Returns a set containing just those elements of the input bag B."
-  (check-type b bag)
+  (check-type b util:bag)
   (cond ((null b) '())
         ((member (first b) (rest b))
          (makeset (rest b)))
@@ -39,7 +39,7 @@
 ;; a list whose first member is :set
 (defun makeset1 (b)
   "Returns a set containing just those elements of the input bag B."
-  (check-type b bag)
+  (check-type b util:bag)
   (cond ((null b) '())
         ((member (first b) (rest b))
          (makeset1 (rest b)))
@@ -47,7 +47,7 @@
 
 (defun makeset (b)
   "Returns a set containing just those elements of the input bag B, with :set as the first element."
-  (check-type b bag)
+  (check-type b util:bag)
   (cond ((null b) nil)
         (t (cons :set (makeset1 b)))))
 
@@ -123,11 +123,49 @@
   "Returns the intersection of sets S1 and S2."
   (check-type s1 set)
   (check-type s2 set)
-  (makeset (cons :set (intersection-unlabeled-sets (common-lisp:rest s1) (common-lisp:rest s2)))))
-
+  (makeset (intersection-unlabeled-sets (common-lisp:rest s1) (common-lisp:rest s2))))
 
 
 ;; 17.25 The relative complement of two sets s1 and s2 is
 ;; the set consisting of those elements of s1 that are not also in s2.
 ;; Define complement in your set file, with complement an external symbol
 ;; in the set package.
+(defun complement-unlabeled-sets (s1 s2)
+  (cond ((null s1) nil)
+        ((null s2) s1)
+        ((member (common-lisp:first s1) s2) (complement-unlabeled-sets (common-lisp:rest s1) s2))
+        (t (cons (common-lisp:first s1) (complement-unlabeled-sets (common-lisp:rest s1) s2)))))
+
+(shadow 'common-lisp:complement)
+(defun complement (s1 s2)
+  "Returns the relative complement of sets s1 and s2 (elements in s1 which are not also in s2)."
+  (check-type s1 set)
+  (check-type s2 set)
+  (makeset (complement-unlabeled-sets (common-lisp:rest s1) (common-lisp:rest s2))))
+
+;; 17.26 A set s1 is a subset of a set s2 if every element of s1 is a member of s2.
+;; Define (subsetp s1 s2) in your set file to return True if the set s1 is a subset
+;; of the set s2, and False otherwise.  Make subsetp an external symbol in the set
+;; package, and shadow lisp:subsetp
+
+;; unfinished 2015-11-03
+(defun subsetp-unlabeled-sets (s1 s2)
+  (cond ((null s1) nil)
+        ((null s2) nil)
+        )
+  )
+
+;; unfinished 2015-11-03
+(shadow 'common-lisp:subsetp)
+(defun subsetp (s1 s2)
+  (check-type s1 set)
+  (check-type s2 set)
+  (if (subsetp-unlabeled-sets s1 s2) t
+      nil))
+
+;; 17.27 Two sets are equal if they have exactly the same elements. Define
+;; (equal s1 s2) in your set file to return True if s1 and s2 are equal sets,
+;; and False otherwise.  Make sure that it does not matter if one set has its
+;; elements in a different order than the other set, and make sure that the order
+;; of the two arguments of set-equal is irrelevant.  Make this equal an external
+;; symbol in the set package and shadow lisp:equal in that package
