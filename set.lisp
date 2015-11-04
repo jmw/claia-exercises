@@ -148,14 +148,12 @@
 ;; of the set s2, and False otherwise.  Make subsetp an external symbol in the set
 ;; package, and shadow lisp:subsetp
 
-;; unfinished 2015-11-03
 (defun subsetp-unlabeled-sets (s1 s2)
-  (cond ((null s1) nil)
+  (cond ((null s1) t)
         ((null s2) nil)
-        )
-  )
+        ((member (car s1) s2) (subsetp-unlabeled-sets (cdr s1) s2))
+        (t nil)))
 
-;; unfinished 2015-11-03
 (shadow 'common-lisp:subsetp)
 (defun subsetp (s1 s2)
   (check-type s1 set)
@@ -163,9 +161,13 @@
   (if (subsetp-unlabeled-sets s1 s2) t
       nil))
 
+;; wow, that one was easy.
+
+
 ;; 17.27 Two sets are equal if they have exactly the same elements. Define
 ;; (equal s1 s2) in your set file to return True if s1 and s2 are equal sets,
 ;; and False otherwise.  Make sure that it does not matter if one set has its
 ;; elements in a different order than the other set, and make sure that the order
 ;; of the two arguments of set-equal is irrelevant.  Make this equal an external
 ;; symbol in the set package and shadow lisp:equal in that package
+
