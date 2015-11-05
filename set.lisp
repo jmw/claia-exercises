@@ -1,6 +1,6 @@
 (defpackage :set 
   (:use :common-lisp :util)
-  (:export :setp :set :makeset :insert :empty :intersection :complement :subsetp))
+  (:export :setp :set :makeset :union :first :rest :insert :empty :intersection :complement :subsetp :equal))
 
 (in-package :set)
 
@@ -158,7 +158,7 @@
 (defun subsetp (s1 s2)
   (check-type s1 set)
   (check-type s2 set)
-  (if (subsetp-unlabeled-sets s1 s2) t
+  (if (subsetp-unlabeled-sets (common-lisp:rest s1) (common-lisp:rest s2)) t
       nil))
 
 ;; wow, that one was easy.
@@ -171,3 +171,14 @@
 ;; of the two arguments of set-equal is irrelevant.  Make this equal an external
 ;; symbol in the set package and shadow lisp:equal in that package
 
+(defun unlabeled-equal (s1 s2)
+  "Returns T if S1 and S2 are equal sets, regardless of order."
+  (and (subsetp-unlabeled-sets s1 s2)
+       (subsetp-unlabeled-sets s2 s1)))
+
+(shadow 'common-lisp:equal)
+(defun equal (s1 s2)
+  (check-type s1 set)
+  (check-type s2 set)
+  (if (unlabeled-equal (common-lisp:rest s1) (common-lisp:rest s2)) t
+      nil))

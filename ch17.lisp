@@ -90,3 +90,18 @@ namely symbols, characters, numbers, and packages."
         ((eql (first l) old) (cons new (subst* new old (rest l))))
         (t (cons (first l)
                  (subst* new old (rest l))))))
+
+;; 17.28 The cross product of two sets s1 and s2 is the set s3, which consists
+;; of all pairs such that the first of each pair is a member of s1 and the second
+;; of each pair is a member of s2.  In the ch17 package, define (xprod s1 s2) to return
+;; the cross product of the sets s1 and s2.  For example,
+;;     (xprod '(:set a b) '(:set c d e))
+;; should evaluate to
+;;     (:set (ac) (ad) (ae) (bc) (bd) (be))
+;; or any other ordering of these six pairs.  Where appropriate, use the
+;; functions whose names are external symbols in the set package,
+;; but do not use any function whose name is an internal symbol in the set package.
+;; Hint: use a helper function xprod1 that takes an object and a set and returns
+;; a list of pairs.  For example,
+;;     (xprod1 'a '(:set c d e))
+;; would return
