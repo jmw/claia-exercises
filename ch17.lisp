@@ -105,3 +105,31 @@ namely symbols, characters, numbers, and packages."
 ;; a list of pairs.  For example,
 ;;     (xprod1 'a '(:set c d e))
 ;; would return
+;;   (:set (a c) (a d) (a e))
+
+(defun xprod1 (elt s1)
+  (set:makeset (xprod1-unlabeled elt (rest s1))))
+
+;; ok:
+;; (xprod1-unlabeled 'a '(c d e))
+;; ((A C) (A D) (A E))
+
+(defun xprod1-unlabeled (elt s1)
+  (cond ((null s1) nil)
+        (t (cons (list elt (car s1)) (xprod1-unlabeled elt (cdr s1))))))
+
+;; returns one list too many:
+;; (xprod-unlabeled '(a b) '(c d e))
+;; (((A C) (A D) (A E)) ((B C) (B D) (B E)))
+
+(defun xprod-unlabeled (s1 s2)
+  (cond ((null s2) nil)
+        ((null s1) nil)
+        (t (cons (xprod1-unlabeled (car s1) s2) (xprod-unlabeled (cdr s1) s2)))))
+
+;; Almost: see problem with xprod1-unlabeled
+;; (xprod '(:set a b) '(:set c d e))
+;; (:SET ((A C) (A D) (A E)) ((B C) (B D) (B E)))
+(defun xprod (s1 s2)
+  (set:makeset (xprod-unlabeled (cdr s1) (cdr s2))))
+
