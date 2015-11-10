@@ -1,5 +1,7 @@
 (defpackage :match
-  (:use :common-lisp))
+  (:use :common-lisp)
+  (:export :variablep :variable))
+
 (in-package :match)
 
 (defun isqmark (n)
@@ -8,6 +10,11 @@
 (defun variablep (s)
   "Return t if the first character of a symbol is '?'"
 	 (char= #\? (char (symbol-name s) 0)))
+
+(shadow 'common-lisp:variable)
+(deftype variable ()
+  "A variable is a symbol which begins with a '?'"
+  '(satisfies match:variablep))
 
 (defun nullp (obj)
   "Return t if obj is nil, otherwise return nil"
@@ -112,6 +119,62 @@
         ((or (or (dont-care (first l1)) (dont-care (first l2)))
              (eql (first l1) (first l2))) (match-lelt (rest l1) (rest l2)))
         (t nil)))
+
+
+;; 17.29 ... Add (boundp v subs) that returns True if the variable v
+;; (as recognized by variablep) is bound to anything in the substitution subs
+;; and False otherwise.  You may use the Lisp function assoc in this definition.
+;; You will have to shadow common-lisp:boundp in your match file.
+(shadow 'common-lisp:boundp)
+(defun boundp (v subs)
+  (check-type v variable)
+  (if (assoc v subs) t
+      nil))
+
+;; 17.30 Add to your match file a function (bound-to v subs) that returns
+;; the term that the variable v is bound to in the substitution subs, or nil
+;; if v is unbound in subs
+;; For example:
+;;   (bound-to '?c '((?a . 1) (?b . 2) (?c . 3)))
+;; returns:
+;;   3
+(defun bound-to (v subs)
+  (check-type v variable)
+  (if (assoc v subs) (cdr (assoc v subs))
+      nil))
+
+;; 17.31 Add too your match file a function (match pat lst), where pat and lst
+;; are both lists of elements.  match should return a substitution--a list of all
+;; pairs (v a) where v is a variable in pat and a is the corresponding element in list.
+;; If the nth member of pat is not a variable, it must be eql to the nth member of lst.
+;; Otherwise match should return nil.  If no element of pat is a variable but each is
+;; eql to its corresponding element of lst, match should return ((T T)).  If a
+;; variable occurs more than once in pat, its corresponding elements in lst must be
+;; the same.  For example:
+;;   > (match '(a b c) '(a b c))
+;;     ((T T))
+;;   > (match '(a b c) '(a c b))
+;;     NIL
+;;   > (match '(a ?x c) '(a b c))
+;;     ((?X B) (T T))
+;;   > (match '(a ?x c ?x) '(a b c d))
+;;     NIL
+;;   > (match '(a ?x c ?x) '(a b c b))
+;;     ((?X B) (T T))
+;;   > (match '(a ?x c ?y) '(a b c d))
+;;     ((?Y D) (?X B) (T T))
+;; The order of pairs in your answer needn't be the same as above.
+;; Hint: You may find it useful to define a help function
+;; (match1 pat lst pairs)
+
+
+;; 17.32 In your match file, define (substitute pat subs), where pat is a list
+;; liike the first argument of match, subs is a substitution, and substitute
+;; returns a list like pat except every variable in pat that is bound in subs
+;; is replaced by the element it is bound to.  For every appropriate pat and lst,
+;; it should be the case that (substitute pat (match pat lst)) = lst.  Shadow
+;; common-lisp:substitute in your match file.
+
 
 
 ;;; Shadow any symbols from automatically inherited
