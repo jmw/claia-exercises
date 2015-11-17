@@ -143,7 +143,7 @@
   (if (assoc v subs) (cdr (assoc v subs))
       nil))
 
-;; 17.31 Add too your match file a function (match pat lst), where pat and lst
+;; 17.31 Add to your match file a function (match pat lst), where pat and lst
 ;; are both lists of elements.  match should return a substitution--a list of all
 ;; pairs (v a) where v is a variable in pat and a is the corresponding element in list.
 ;; If the nth member of pat is not a variable, it must be eql to the nth member of lst.
