@@ -97,7 +97,7 @@ NIL otherwise"
   (cond
         ((null l) nil)
         ((> n (length l)) nil)
-        ((= (1- n) 0) (first l))
+        ((= n 0) (first l))
         (t (my-nth (1- n) (rest l)))))
 
 
