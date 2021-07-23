@@ -54,10 +54,16 @@
 ;; 17.19 Redefine setp in the set file so that it just checks that the first
 ;; member of a list that represents a set is :set
 (defun setp (l)
+  "Returns true if L is a list which begins with the keyword :set."
   (cond ((not (listp l)) nil)
-        ((null l) nil)
         ((equal (common-lisp:first l) :set) t)
         (t nil)))
+
+;; or more concisely:
+(defun setp (l)
+  "Returns true if L is a list which begins with the keyword :set."
+  (and (listp l)
+       (equal (common-lisp:first l) :set)))
 
 ;; 17.20 Define set:first and set:rest in your set file to return the element
 ;; that happens to be listed first in a set, and the set without that element, respectively.
